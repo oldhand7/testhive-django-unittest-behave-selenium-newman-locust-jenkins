@@ -1,0 +1,762 @@
+{
+	"info": {
+		"_postman_id": "48fba356-eab5-4dcb-b417-c8215b18da57",
+		"name": "blog-sample-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18069639"
+	},
+	"item": [
+		{
+			"name": "ping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body matches string to 'pong'\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"pong\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/ping",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Number of users should be equal to 2\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.length).to.eql(2);",
+							"});",
+							"",
+							"pm.test(\"First user's information should be correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[0][\"fields\"][\"username\"]).to.eql(\"testusername1\");",
+							"    pm.expect(jsonData[0][\"fields\"][\"email\"]).to.eql(\"test1@test.com\");",
+							"    pm.expect(jsonData[0][\"fields\"][\"birthday\"]).to.eql(\"2001-09-03\");",
+							"    pm.expect(jsonData[0][\"fields\"][\"address\"]).to.eql(\"Turkey İstanbul Bakırköy 344252\");",
+							"});",
+							"",
+							"pm.test(\"Second user's information should be correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData[1][\"fields\"][\"username\"]).to.eql(\"testusername2\");",
+							"    pm.expect(jsonData[1][\"fields\"][\"email\"]).to.eql(\"test2@test.com\");",
+							"    pm.expect(jsonData[1][\"fields\"][\"birthday\"]).to.eql(\"2000-09-03\");",
+							"    pm.expect(jsonData[1][\"fields\"][\"address\"]).to.eql(\"Studio 103 Wellfield Road Roath Cardiff\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Get one user\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.fields.username).to.eql(\"testusername1\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/user?username=testusername1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"user"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "testusername1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user-non-existing-user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Get non-existing user\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.eql({});",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/api/user?username=NonExistingUser",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"user"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "NonExistingUser"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user-post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/user?username=testusername1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"user"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "testusername1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register-user-success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code should be 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Result should be true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['result']).to.eql(true);",
+							"});",
+							"",
+							"pm.test(\"Message should be correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['message']).to.eql(\"User is recorded with given informations.\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "test17",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@test.com",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2013-09-24",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Bredgatan 4 211 30 Malmö Sweden",
+							"type": "text"
+						},
+						{
+							"key": "client",
+							"value": "app",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register-user-fail-already-member",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code should be 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"pm.test(\"Result should be true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['result']).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Message should be correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['message']).to.eql(\"Member already recorded!\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "testusername1",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@test.com",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2013-09-24",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Bredgatan 4 211 30 Malmö Sweden",
+							"type": "text"
+						},
+						{
+							"key": "client",
+							"value": "app",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register-user-fail-empty-username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code should be 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"pm.test(\"Result should be true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['result']).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Message should be correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['message']).to.eql(\"All fields should be entered!\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@test.com",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2013-09-24",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Bredgatan 4 211 30 Malmö Sweden",
+							"type": "text"
+						},
+						{
+							"key": "client",
+							"value": "app",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register-user-fail-empty-email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code should be 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"pm.test(\"Result should be true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['result']).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Message should be correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['message']).to.eql(\"All fields should be entered!\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "testusername1",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2013-09-24",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Bredgatan 4 211 30 Malmö Sweden",
+							"type": "text"
+						},
+						{
+							"key": "client",
+							"value": "app",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register-user-fail-empty-birthday",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code should be 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"pm.test(\"Result should be true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['result']).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Message should be correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['message']).to.eql(\"All fields should be entered!\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "testusername1",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@test.com",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Bredgatan 4 211 30 Malmö Sweden",
+							"type": "text"
+						},
+						{
+							"key": "client",
+							"value": "app",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register-user-fail-empty-address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code should be 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"pm.test(\"Result should be true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['result']).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Message should be correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['message']).to.eql(\"All fields should be entered!\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "testusername1",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@test.com",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2013-09-24",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "client",
+							"value": "app",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register-user-fail-worng-format-birthday",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code should be 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"pm.test(\"Result should be true\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['result']).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"Message should be correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData['message']).to.include(\"value has an invalid date format. It must be in YYYY-MM-DD form\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "testusername5",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "test2@test.com",
+							"type": "text"
+						},
+						{
+							"key": "birthday",
+							"value": "2013.09.24",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "Bredgatan 4 211 30 Malmö Sweden",
+							"type": "text"
+						},
+						{
+							"key": "client",
+							"value": "app",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/api/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

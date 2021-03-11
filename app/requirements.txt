@@ -1,0 +1,9 @@
+Django
+psycopg2==2.9.3
+pyquery
+locust
+passlib
+django-subdomains
+pytz
+django-nose
+coverage
